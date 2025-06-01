@@ -1,0 +1,136 @@
+' Canonical copy. See nova_archive/README.md
+@startuml
+package "Portail Symphonique" {
+  package Frontend {
+    class ReactApp {
+      +ScoreViewer
+      +ComposerChat
+      +MusicianSelector
+      +PlaybackControls
+    }
+    class abcjs <<library>> {
+      +renderAbc(target, abcString)
+    }
+    class musescoreDotComViewer <<optional>> {
+      +renderCloudScore(scoreId)
+    }
+    class DocumentationManager {
+      +displayHelpOverlay(section: String)
+      +showUserManual()
+      +provideDevDocs()
+    }
+    class LearningModule {
+      +startOnboardingCourse()
+      +runDeveloperTutorial()
+      +trackProgress(userId)
+    }
+  }
+  package Backend {
+    class FastAPI {
+      +/partition() : ABC
+      +/edit/measure() : MusicXML
+      +/emotion-map() : JSON
+      +handleError() : JSON
+    }
+    class music21 <<library>> {
+      +parseStream()
+      +toMusicXML()
+      +toABC()
+      +toLilyPond()
+    }
+    class MuseScoreCLI <<external tool>> {
+      +refineScore(input: MusicXML, output: ABC|MusicXML|PDF)
+    }
+    class musescoreDotComAPI <<cloud service>> {
+      +uploadScore(score: MusicXML)
+      +retrieveScore(scoreId)
+    }
+    class DeveloperDocsGenerator {
+      +generateAPIDocs()
+      +exportPluginGuide()
+    }
+  }
+  package Agents {
+    class MusicianAgent {
+      +instrument
+      +style
+      +memory
+      +generatePart()
+    }
+    class EmotionAgent {
+      +parseEmotion(input: String)
+      +modulateScore(dynamics: String)
+    }
+    class WebSocketChannel {
+      +sendCommand(command: JSON)
+      +receiveUpdate(score: ABC)
+    }
+  }
+  package SessionManagement {
+    class SessionStateManager {
+      +trackState(score, commands)
+    }
+    class SessionRecorder {
+      +logAction(command, scoreVersion)
+    }
+    class PromptReplayEngine {
+      +replaySession(versionId)
+    }
+  }
+  package Export {
+    class ExportManager {
+      +toMIDI()
+      +toMusicXML()
+      +toABC()
+      +toPDF()
+      +toSVG()
+    }
+  }
+  package Multimodality {
+    class AudioInputProcessor {
+      +convertToMIDI(audio: WAV)
+    }
+    class ImageToNoteScanner {
+      +convertToMusicXML(image: PNG)
+    }
+    class AccessibilityHandler {
+      +screenReaderSupport()
+      +keyboardNavigation()
+    }
+  }
+  ReactApp --> abcjs : render ABC
+  ReactApp --> musescoreDotComViewer : render cloud score (optional)
+  ReactApp --> FastAPI : fetch /partition (ABC|MusicXML)
+  ReactApp --> SessionStateManager : save/load state
+  ReactApp --> AudioInputProcessor : send audio input
+  ReactApp --> ImageToNoteScanner : upload score image
+  ReactApp --> AccessibilityHandler : enhance UX
+  ReactApp --> DocumentationManager : display guides
+  ReactApp --> LearningModule : run tutorials
+  DocumentationManager --> AccessibilityHandler : ensure accessible docs
+  LearningModule --> AccessibilityHandler : ensure accessible courses
+  FastAPI --> music21 : generate/edit score
+  FastAPI --> MuseScoreCLI : refine/export score
+  FastAPI --> musescoreDotComAPI : upload/retrieve score
+  FastAPI --> WebSocketChannel : send/receive agent commands
+  FastAPI --> DeveloperDocsGenerator : generate API docs
+  music21 --> ExportManager : export formats
+  MuseScoreCLI --> ExportManager : export refined formats
+  MuseScoreCLI --> musescoreDotComAPI : upload refined score
+  DeveloperDocsGenerator --> musescoreDotComAPI : store docs in cloud
+  FastAPI --> MusicianAgent : delegate note actions
+  FastAPI --> EmotionAgent : apply dynamics
+  MusicianAgent --> music21 : generate part
+  EmotionAgent --> MuseScoreCLI : adjust dynamics (via plugin)
+  MusicianAgent --> WebSocketChannel : send/receive updates
+  EmotionAgent --> WebSocketChannel : send/receive updates
+  MusicianAgent --> DocumentationManager : provide agent-specific guides
+  EmotionAgent --> DocumentationManager : provide emotion command guides
+  SessionStateManager --> SessionRecorder : log state
+  SessionRecorder --> PromptReplayEngine : provide logs for replay
+  SessionRecorder --> DocumentationManager : log for tutorial content
+  SessionStateManager --> musescoreDotComAPI : save session to cloud
+  AudioInputProcessor --> music21 : convert to MusicXML
+  ImageToNoteScanner --> MuseScoreCLI : convert to MusicXML
+}
+@enduml
