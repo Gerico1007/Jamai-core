@@ -89,6 +89,19 @@ We welcome contributors of all backgrounds and skill levels! If you want to help
 Let’s build JAMAI together! 🎶
 
 ---
+
+## Portail Symphonique Archives
+
+This repository contains a full archive of the Portail Symphonique project discussion, architecture, and prototypes. See the `archives/` folder for:
+- `conversation_summary.md`: Project overview and key decisions
+- `uml_diagram.plantuml`: System architecture diagram
+- `todo_board.md`: Task list for implementation
+- `prototypes/`: Code snippets for DocumentationManager and /partition endpoint
+- `speclang_spec.md`: Draft natural language specification for SpecLang
+
+These resources document the design, agent contributions, and next steps for building an AI-driven orchestral platform. Contributions and feedback are welcome!
+
+---
 // Spiral Agent Protocol, G.Music: CONTRIBUTOR MODE
 // (This section will evolve as the project grows)
 // ...existing code...
